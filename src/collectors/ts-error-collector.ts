@@ -42,6 +42,10 @@ export class TypeScriptErrorCollector implements ErrorCollector {
 
 					const pkg = monorepoInfo.packages[i];
 					onProgress?.(pkg.name, i + 1, total);
+
+					// Yield to event loop to allow spinner to update
+					await new Promise((resolve) => setImmediate(resolve));
+
 					const errors = await this.collectFromPath(pkg.path, pkg.name);
 					allErrors.push(...errors);
 				}
@@ -74,24 +78,14 @@ export class TypeScriptErrorCollector implements ErrorCollector {
 		}
 
 		try {
-			// Run in next tick to allow interruption
-			return await new Promise<TypeScriptError[]>((resolve, reject) => {
-				setImmediate(() => {
-					if (this.interrupted) {
-						resolve([]);
-						return;
-					}
-					try {
-						const errors = this.collectErrorsFromProject(
-							tsconfigPath,
-							packageName,
-						);
-						resolve(errors);
-					} catch (err) {
-						reject(err);
-					}
-				});
-			});
+			if (this.interrupted) {
+				return [];
+			}
+
+			// Note: TypeScript compilation is synchronous and will block the event loop
+			// We yield before calling this function to allow spinner to update
+			const errors = this.collectErrorsFromProject(tsconfigPath, packageName);
+			return errors;
 		} catch (error) {
 			if (!this.interrupted) {
 				console.error(`  ✗ Error collecting from ${packageName}:`, error);
