@@ -2,7 +2,7 @@
 import path from "node:path";
 import chalk from "chalk";
 import { Command } from "commander";
-import ora from "ora";
+import ora, { type Ora } from "ora";
 import { collectTypeScriptErrors } from "./collectors";
 import { detectMonorepo } from "./detectors";
 import { generateTSV } from "./generators";
@@ -11,7 +11,7 @@ const program = new Command();
 
 // Handle Ctrl+C gracefully
 let interrupted = false;
-let activeSpinner: any = null;
+let activeSpinner: Ora | null = null;
 
 process.on("SIGINT", () => {
 	if (!interrupted) {
