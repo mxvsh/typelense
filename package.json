@@ -1,6 +1,6 @@
 {
 	"name": "typelense",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "TypeScript error collector for TypeScript projects",
 	"type": "module",
 	"main": "./dist/index.js",
