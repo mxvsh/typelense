@@ -2,7 +2,7 @@
  * Base detector class for monorepo detection
  */
 
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import type { MonorepoDetector, MonorepoType, PackageInfo } from "../types";
 
@@ -19,8 +19,8 @@ export abstract class BaseDetector implements MonorepoDetector {
 
 	protected async readJSON<T>(filePath: string): Promise<T | null> {
 		try {
-			const file = Bun.file(filePath);
-			return await file.json();
+			const content = readFileSync(filePath, "utf-8");
+			return JSON.parse(content) as T;
 		} catch {
 			return null;
 		}

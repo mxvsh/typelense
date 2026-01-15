@@ -3,6 +3,7 @@
  */
 
 import path from "node:path";
+import { existsSync } from "node:fs";
 import ts from "typescript";
 import type { ErrorCollector, MonorepoInfo, TypeScriptError } from "../types";
 
@@ -54,9 +55,8 @@ export class TypeScriptErrorCollector implements ErrorCollector {
 
 	private findTsConfig(packagePath: string): string | null {
 		const tsconfigPath = path.join(packagePath, "tsconfig.json");
-		const file = Bun.file(tsconfigPath);
 
-		if (file.size > 0) {
+		if (existsSync(tsconfigPath)) {
 			return tsconfigPath;
 		}
 

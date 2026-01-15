@@ -3,7 +3,7 @@
  */
 
 import path from "node:path";
-import { Glob } from "bun";
+import fg from "fast-glob";
 import type { PackageInfo } from "../types";
 import { BaseDetector } from "./base-detector";
 
@@ -43,9 +43,12 @@ export class NpmDetector extends BaseDetector {
 		const packages: PackageInfo[] = [];
 
 		for (const pattern of workspacePatterns) {
-			const glob = new Glob(path.join(pattern, "package.json"));
+			const files = await fg(path.join(pattern, "package.json"), {
+				cwd: rootPath,
+				absolute: false,
+			});
 
-			for await (const file of glob.scan({ cwd: rootPath })) {
+			for (const file of files) {
 				const packagePath = path.dirname(path.resolve(rootPath, file));
 				const pkgJson = await this.readJSON<{ name: string; version?: string }>(
 					path.resolve(rootPath, file),

@@ -3,17 +3,21 @@
 	"version": "0.1.0",
 	"description": "TypeScript error collector for monorepos",
 	"type": "module",
-	"module": "index.ts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"bin": {
-		"typelense": "./index.ts"
+		"typelense": "./dist/cli.js"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"src"
 	],
 	"scripts": {
-		"start": "bun run src/index.ts",
-		"dev": "bun --hot src/index.ts",
+		"start": "bun run src/cli.ts",
+		"dev": "bun --hot src/cli.ts",
 		"build": "bun run build.ts",
+		"prepublishOnly": "bun run build",
 		"release": "release-it"
 	},
 	"keywords": [

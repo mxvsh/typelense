@@ -4,7 +4,7 @@
 
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { Glob } from "bun";
+import fg from "fast-glob";
 import { parse } from "yaml";
 import type { PackageInfo } from "../types";
 import { BaseDetector } from "./base-detector";
@@ -38,9 +38,12 @@ export class PnpmDetector extends BaseDetector {
 			const packages: PackageInfo[] = [];
 
 			for (const pattern of workspace.packages) {
-				const glob = new Glob(path.join(pattern, "package.json"));
+				const files = await fg(path.join(pattern, "package.json"), {
+					cwd: rootPath,
+					absolute: false,
+				});
 
-				for await (const file of glob.scan({ cwd: rootPath })) {
+				for (const file of files) {
 					const packagePath = path.dirname(path.resolve(rootPath, file));
 					const packageJson = await this.readJSON<{
 						name: string;

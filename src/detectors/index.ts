@@ -3,6 +3,7 @@
  */
 
 import path from "node:path";
+import { readFileSync } from "node:fs";
 import type { MonorepoDetector, MonorepoInfo, PackageInfo } from "../types";
 import { LernaDetector } from "./lerna-detector";
 import { NpmDetector, YarnDetector } from "./npm-detector";
@@ -55,10 +56,10 @@ export async function detectMonorepo(
 
 	// No monorepo detected, check for single package
 	const packageJsonPath = path.resolve(rootPath, "package.json");
-	const file = Bun.file(packageJsonPath);
 
 	try {
-		const packageJson = await file.json();
+		const content = readFileSync(packageJsonPath, "utf-8");
+		const packageJson = JSON.parse(content);
 		const singlePackage: PackageInfo = {
 			name: packageJson.name || "unknown",
 			path: rootPath,

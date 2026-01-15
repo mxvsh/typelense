@@ -2,6 +2,7 @@
  * TSV file generator for TypeScript errors
  */
 
+import { writeFile } from "node:fs/promises";
 import type { OutputGenerator, TypeScriptError } from "../types";
 
 export class TsvGenerator implements OutputGenerator {
@@ -27,7 +28,7 @@ export class TsvGenerator implements OutputGenerator {
 		}
 
 		const content = rows.join("\n");
-		await Bun.write(outputPath, content);
+		await writeFile(outputPath, content, "utf-8");
 	}
 
 	private escapeField(field: string): string {

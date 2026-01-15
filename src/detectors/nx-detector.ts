@@ -3,7 +3,7 @@
  */
 
 import path from "node:path";
-import { Glob } from "bun";
+import fg from "fast-glob";
 import type { PackageInfo } from "../types";
 import { BaseDetector } from "./base-detector";
 
@@ -63,9 +63,12 @@ export class NxDetector extends BaseDetector {
 			];
 
 			for (const pattern of patterns) {
-				const glob = new Glob(pattern);
+				const files = await fg(pattern, {
+					cwd: rootPath,
+					absolute: false,
+				});
 
-				for await (const file of glob.scan({ cwd: rootPath })) {
+				for (const file of files) {
 					const packagePath = path.dirname(path.resolve(rootPath, file));
 					const pkgJson = await this.readJSON<{
 						name: string;
