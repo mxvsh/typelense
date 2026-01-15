@@ -41,9 +41,11 @@ export interface MonorepoDetector {
 	getPackages(rootPath: string): Promise<PackageInfo[]>;
 }
 
-export interface ProgressCallback {
-	(packageName: string, current: number, total: number): void;
-}
+export type ProgressCallback = (
+	packageName: string,
+	current: number,
+	total: number,
+) => void;
 
 export interface ErrorCollector {
 	collect(

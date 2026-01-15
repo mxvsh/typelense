@@ -2,8 +2,8 @@
  * Monorepo detector orchestrator
  */
 
-import path from "node:path";
 import { readFileSync } from "node:fs";
+import path from "node:path";
 import type { MonorepoDetector, MonorepoInfo, PackageInfo } from "../types";
 import { LernaDetector } from "./lerna-detector";
 import { NpmDetector, YarnDetector } from "./npm-detector";

@@ -2,8 +2,8 @@
  * TypeScript error collector using the TypeScript Compiler API
  */
 
-import path from "node:path";
 import { existsSync } from "node:fs";
+import path from "node:path";
 import ts from "typescript";
 import type { ErrorCollector, MonorepoInfo, TypeScriptError } from "../types";
 

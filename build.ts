@@ -1,4 +1,4 @@
-import { readdirSync, statSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 // Function to recursively find all .ts files

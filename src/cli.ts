@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import path from "node:path";
+import chalk from "chalk";
 import { Command } from "commander";
 import ora from "ora";
-import chalk from "chalk";
 import { collectTypeScriptErrors } from "./collectors";
 import { detectMonorepo } from "./detectors";
 import { generateTSV } from "./generators";
@@ -47,10 +47,10 @@ program
 
 				if (!options.quiet) {
 					console.log(
-						chalk.gray("[DIR]") + " Scanning directory: " + chalk.cyan(targetDir),
+						`${chalk.gray("[DIR]")} Scanning directory: ${chalk.cyan(targetDir)}`,
 					);
 					console.log(
-						chalk.gray("[OUT]") + " Output file: " + chalk.cyan(outputPath) + "\n",
+						`${chalk.gray("[OUT]")} Output file: ${chalk.cyan(outputPath)}\n`,
 					);
 				}
 
